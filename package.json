@@ -1,0 +1,19 @@
+{
+  "name": "covid",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "author": "Emir Kabal",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1",
+    "node-cron": "^2.0.3",
+    "puppeteer": "^2.1.1"
+  },
+  "engines": {
+    "node": "12.61.1"
+  }
+}
