@@ -40,20 +40,26 @@ app.listen(3000);
 
 const update = async () => {
     
-    const browser = await puppeteer.launch();
+    const browser = await puppeteer.launch({
+        headless: true,
+        args: [
+            '--no-sandbox',
+            '--disable-setuid-sandbox',
+        ]
+    });
     const page = await browser.newPage();
     page.setViewport({ width: 1920, height: 1080, deviceScaleFactor: 2 });
     
     await page.goto('https://covid19.saglik.gov.tr/', { waitUntil: 'networkidle2' });
     
     await page.screenshot({
-        path: 'images/info-table.png',
+        path: './images/info-table.png',
         clip: {x: 43, y: 232, width: 894, height: 498}
     });
     console.log('saved info table');
 
     await page.screenshot({
-        path: 'images/statistics-table.png',
+        path: './images/statistics-table.png',
         clip: {x: 983, y: 232, width: 894, height: 497}
     });
 
