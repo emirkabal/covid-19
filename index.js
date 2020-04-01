@@ -4,6 +4,11 @@ const express = require('express');
 const fs = require('fs');
 var app = express();
 
+if (!fs.existsSync('./images')) {
+    console.log('created images folder.');
+    fs.mkdirSync('./images');
+}
+
 
 app.get('/', (req, res) => {
     res.status(200).json({
@@ -35,7 +40,9 @@ app.get('/file/:file', async (req, res) => {
 
 })
 
-app.listen(3000);
+app.listen(3000, () => {
+    console.log('web application started on 3000 port.');
+});
 
 
 const update = async () => {
