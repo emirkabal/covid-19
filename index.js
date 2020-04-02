@@ -4,10 +4,6 @@ const express = require('express');
 const fs = require('fs');
 var app = express();
 
-if (!fs.existsSync('./images')) {
-    console.log('created images folder.');
-    fs.mkdirSync('./images');
-}
 
 
 app.get('/', (req, res) => {
@@ -46,6 +42,11 @@ app.listen(3000, () => {
 
 
 const update = async () => {
+
+    if (!fs.existsSync('./images')) {
+        console.log('created images folder.');
+        fs.mkdirSync('./images');
+    }
     
     const browser = await puppeteer.launch({
         headless: true,
@@ -59,14 +60,17 @@ const update = async () => {
     
     await page.goto('https://covid19.saglik.gov.tr/', { waitUntil: 'networkidle2' });
     
+    let date = new Date();
+    let dateStr = `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`;
+
     await page.screenshot({
-        path: './images/info-table.png',
+        path: `./images/info-table_${dateStr}.png`,
         clip: {x: 43, y: 232, width: 894, height: 498}
     });
     console.log('saved info table');
 
     await page.screenshot({
-        path: './images/statistics-table.png',
+        path: `./images/statistics-table_${dateStr}.png`,
         clip: {x: 983, y: 232, width: 894, height: 497}
     });
 
@@ -79,7 +83,7 @@ const update = async () => {
 
 
 update();
-cron.schedule('0 20 * * *', async () => {
+cron.schedule('40 19 * * *', async () => {
   
     update();
 
