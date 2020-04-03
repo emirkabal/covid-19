@@ -5,7 +5,6 @@ const fs = require('fs');
 var app = express();
 
 
-
 app.get('/', (req, res) => {
     res.status(200).json({
         status: "OK"
@@ -17,7 +16,7 @@ app.get('/file/:file', async (req, res) => {
 
     let file = req.params.file;
     let images = fs.readdirSync('./images');
-    
+
     if (!file || !images.includes(file.toLocaleLowerCase())) {
         return res.json({
             status: "error"
@@ -35,6 +34,37 @@ app.get('/file/:file', async (req, res) => {
     res.end(image);
 
 })
+
+app.get('/latest', (req, res) => {
+    let type = req.query.type || null;
+
+    let list = [];
+
+    fs.readdirSync('./images').forEach((e) => {
+        let stat = fs.statSync(`./images/${e}`);
+        list.push({name: e, stat: stat.birthtime});
+    });
+
+    list.sort((a, b) => a.birthtime - b.birthtime);
+
+    let date = list[0].name.split('_')[1];
+
+    let image;
+
+    if (!type || type.toLocaleLowerCase() === "info") {
+        image = Buffer.from(fs.readFileSync(`./images/info-table_${date}`), 'base64');
+
+    } else {
+        image = Buffer.from(fs.readFileSync(`./images/statistics-table_${date}`), 'base64');
+    }
+
+    res.writeHead(200, {
+        'Content-Type': 'image/png'
+    });
+
+    res.end(image);
+
+});
 
 app.listen(3000, () => {
     console.log('web application started on 3000 port.');
@@ -61,7 +91,7 @@ const update = async () => {
     await page.goto('https://covid19.saglik.gov.tr/', { waitUntil: 'networkidle2' });
     
     let date = new Date();
-    let dateStr = `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`;
+    let dateStr = `${pad(date.getDate())}-${pad(date.getMonth() + 1)}-${date.getFullYear()}`;
 
     await page.screenshot({
         path: `./images/info-table_${dateStr}.png`,
@@ -83,7 +113,7 @@ const update = async () => {
 
 
 update();
-cron.schedule('0,15,30,40 19,20 * * *', async () => {
+cron.schedule('15 20 * * *', async () => {
   
     update();
 
@@ -95,5 +125,10 @@ cron.schedule('0,15,30,40 19,20 * * *', async () => {
 
 });
 
+
+function pad(num) {
+    if (num < 10) return `0${num}`;
+    else return num;
+}
 
 
