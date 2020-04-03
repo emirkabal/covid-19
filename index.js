@@ -83,7 +83,7 @@ const update = async () => {
 
 
 update();
-cron.schedule('40 19 * * *', async () => {
+cron.schedule('0,15,30,40 19,20 * * *', async () => {
   
     update();
 
