@@ -35,37 +35,6 @@ app.get('/file/:file', async (req, res) => {
 
 })
 
-app.get('/latest', (req, res) => {
-    let type = req.query.type || null;
-
-    let list = [];
-
-    fs.readdirSync('./images').forEach((e) => {
-        let stat = fs.statSync(`./images/${e}`);
-        list.push({name: e, stat: stat.birthtime});
-    });
-
-    list.sort((a, b) => a.birthtime - b.birthtime);
-
-    let date = list[0].name.split('_')[1];
-
-    let image;
-
-    if (!type || type.toLocaleLowerCase() === "info") {
-        image = Buffer.from(fs.readFileSync(`./images/info-table_${date}`), 'base64');
-
-    } else {
-        image = Buffer.from(fs.readFileSync(`./images/statistics-table_${date}`), 'base64');
-    }
-
-    res.writeHead(200, {
-        'Content-Type': 'image/png'
-    });
-
-    res.end(image);
-
-});
-
 app.listen(3000, () => {
     console.log('web application started on 3000 port.');
 });
@@ -94,13 +63,13 @@ const update = async () => {
     let dateStr = `${pad(date.getDate())}-${pad(date.getMonth() + 1)}-${date.getFullYear()}`;
 
     await page.screenshot({
-        path: `./images/info-table_${dateStr}.png`,
+        path: `./images/info-table.png`,
         clip: {x: 43, y: 232, width: 894, height: 498}
     });
     console.log('saved info table');
 
     await page.screenshot({
-        path: `./images/statistics-table_${dateStr}.png`,
+        path: `./images/statistics-table.png`,
         clip: {x: 983, y: 232, width: 894, height: 497}
     });
 
@@ -113,7 +82,7 @@ const update = async () => {
 
 
 update();
-cron.schedule('15 20 * * *', async () => {
+cron.schedule('15,30 20 * * *', async () => {
   
     update();
 
