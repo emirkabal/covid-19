@@ -82,7 +82,7 @@ const update = async () => {
 
 
 update();
-cron.schedule('15,30 20 * * *', async () => {
+cron.schedule('0,5,10,15,30,35,45 19,20,21 * * *', async () => {
   
     update();
 
