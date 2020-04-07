@@ -55,7 +55,7 @@ const update = async () => {
         ]
     });
     const page = await browser.newPage();
-    page.setViewport({ width: 1920, height: 1080, deviceScaleFactor: 2 });
+    page.setViewport({ width: 1920, height: 1080 });
     
     await page.goto('https://covid19.saglik.gov.tr/', { waitUntil: 'networkidle2' });
     
