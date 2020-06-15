@@ -64,7 +64,7 @@ const update = async () => {
 
     await page.screenshot({
         path: `./images/info-table.png`,
-        clip: {x: 43, y: 232, width: 894, height: 498}
+        clip: {x: 43, y: 232, width: 894, height: 480}
     });
     console.log('saved info table');
 
