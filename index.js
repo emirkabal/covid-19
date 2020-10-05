@@ -61,26 +61,27 @@ const update = async () => {
     }
     
     const browser = await puppeteer.launch({
-        headless: true,
+        headless: false,
         args: [
             '--no-sandbox',
             '--disable-setuid-sandbox',
         ]
     });
     const page = await browser.newPage();
-    page.setViewport({ width: 1080, height: 969 });
+    page.setViewport({ width: 1920, height: 1080 });
     
     await page.goto('https://covid19.saglik.gov.tr/', { waitUntil: 'networkidle0' });
     await page.evaluate(_ => {
-        window.scrollBy(0, 700);
+        window.scrollBy(0, 600);
     });
     let date = new Date();
-    let dateStr = `${pad(date.getDate())}-${pad(date.getMonth() + 1)}-${date.getFullYear()}`;
+    // let dateStr = `${pad(date.getDate())}-${pad(date.getMonth() + 1)}-${date.getFullYear()}`;
 
     await page.screenshot({
         path: `./images/info-table.png`,
-        clip: {x: 40, y: 930, width: 990, height: 480}
+        clip: {x: 290, y: 1010, width: 1338, height: 610}
     });
+    browser.close();
     console.log('saved info table');
 
     // await page.screenshot({
@@ -91,7 +92,6 @@ const update = async () => {
     // console.log('saved statistics table');
 
 
-    browser.close();
 
 } 
 
