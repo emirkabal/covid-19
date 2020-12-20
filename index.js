@@ -1,3 +1,4 @@
+require('dotenv').config();
 const cron = require('node-cron');
 const fetch = require('node-fetch').default;
 const express = require('express');
