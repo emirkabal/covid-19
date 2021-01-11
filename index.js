@@ -50,7 +50,7 @@ const update = async () => {
 } 
 
 update();
-cron.schedule('* */1 * *', async () => {
+cron.schedule('*/1 * * * *', async () => {
     update();
 }, {
   scheduled: true,
